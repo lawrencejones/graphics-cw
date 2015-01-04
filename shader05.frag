@@ -48,7 +48,7 @@ struct Intersection
 // implement the functions in the follwing. 
 // In order to reach all points you need to implement at least one
 // feature more than shown in the coursework description
-// effects like refraction, scattering, caustics, soft hadows, etc.
+// effects like refraction, scattering, caustics, soft hadows, etc. 
 // are possible. 
 ////////////////////////////////////////////////////////////////////
 
