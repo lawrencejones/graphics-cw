@@ -7,12 +7,6 @@
 #version 150 compatibility
 #extension GL_ARB_geometry_shader4 : enable
 
-#define WINDOWS 0
-
-#if WINDOWS
-layout (triangles) in;
-layout (triangle_strip) out;
-#endif
 layout (max_vertices = 72) out;
 
 const float pi = 3.14159265359;
