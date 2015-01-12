@@ -147,7 +147,8 @@ unsigned int frameCaptured = 0;
 
 void captureFrame()
 {
-  unsigned char* pixels = new unsigned char[3 * win_width * win_height];
+  int dim = 3 * win_width * win_height;
+  unsigned char* pixels = new unsigned char[dim];
   glReadPixels(0, 0, win_width, win_height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
   encodeOneStep(pixels, win_width, win_height, std::string("04b"));
   delete[] pixels;

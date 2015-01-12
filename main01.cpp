@@ -8,6 +8,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
+#include <pthread.h>
+#include <string>
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -20,7 +22,7 @@
 
 #ifdef __APPLE__
 #include <sys/time.h>
-#include <stdio.h>
+ #include <stdio.h>
 #include <unistd.h>
 #endif
 ///////////////////////////////////////////////////////////////////////
@@ -358,6 +360,7 @@ int main(int argc, char **argv) {
   setShaders();
 
   glutMainLoop();
+  int i=pthread_getconcurrency();
   return EXIT_SUCCESS;
 }
 

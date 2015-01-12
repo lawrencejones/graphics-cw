@@ -7,7 +7,7 @@
 #version 150 compatibility
 #extension GL_ARB_geometry_shader4 : enable
 
-#define WINDOWS 0
+#define WINDOWS 1
 
 #if WINDOWS
 layout(triangles) in;
