@@ -8,7 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
-#include <pthread.h>
 #include <string>
 
 #include <GL/glew.h>
@@ -360,7 +359,6 @@ int main(int argc, char **argv) {
   setShaders();
 
   glutMainLoop();
-  int i=pthread_getconcurrency();
   return EXIT_SUCCESS;
 }
 
