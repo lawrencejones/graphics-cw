@@ -14,6 +14,7 @@
 #include <GL/glut.h>
 
 #ifdef __linux__
+#include <pthread.h>
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -356,6 +357,9 @@ int main(int argc, char **argv) {
     exit(1);
   }
   initialize();
+#ifdef __linux__
+  int i=pthread_getconcurrency();
+#endif
   setShaders();
 
   glutMainLoop();
