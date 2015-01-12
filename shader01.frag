@@ -6,16 +6,23 @@
 
 #version 150 compatibility
 
-in vertexData
+uniform vec4 ambientColor;
+uniform vec4 diffuseColor;
+uniform vec4 specularColor;
+uniform float specularExponent;
+uniform int shader;
+
+in fragmentData
 {
-	vec3 vpos;
-	vec3 normal;
-	vec4 color;
+  vec3 pos;
+  vec3 normal;
+  vec4 color;
 }frag;
 
 
 void main()
 {
-	//pass-trough shaders
-	gl_FragColor = frag.color;
+  vec4 outcol = frag.color;
+
+  gl_FragColor = outcol;
 }
