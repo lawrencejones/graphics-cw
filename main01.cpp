@@ -44,8 +44,8 @@ void CheckOpenGLError(const char* stmt, const char* fname, int line);
 
 ///////////////////////////////////////////////////////////////////////
 //shaders and light pos variables
-GLuint v,f,p,g;
-float lpos[4] = {15.0, 0.5, 15.0, 0.0};
+GLuint v, f, p, g;
+float lpos[4] = { 15.0, 0.5, 15.0, 0.0 };
 int subdivLevel;
 GLuint tex;
 
@@ -73,7 +73,7 @@ void renderScene(void)
 
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
-  gluLookAt(0.0,0.0,1.0,0.0,0.0,-1.0,0.0f,1.0f,0.0f);
+  gluLookAt(0.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0f, 1.0f, 0.0f);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
@@ -140,10 +140,10 @@ char *textFileRead(char *fn)
   FILE *fp;
   char *content = NULL;
 
-  int count=0;
+  int count = 0;
 
   if (fn != NULL) {
-    fp = fopen(fn,"rt");
+    fp = fopen(fn, "rt");
 
     if (fp != NULL) {
 
@@ -152,8 +152,8 @@ char *textFileRead(char *fn)
       rewind(fp);
 
       if (count > 0) {
-        content = (char *)malloc(sizeof(char) * (count+1));
-        count = fread(content,sizeof(char),count,fp);
+        content = (char *)malloc(sizeof(char) * (count + 1));
+        count = fread(content, sizeof(char), count, fp);
         content[count] = '\0';
       }
       fclose(fp);
@@ -172,7 +172,7 @@ char *textFileRead(char *fn)
 //helper for submission
 void captureFrame()
 {
-  GLubyte* pixels = new GLubyte[3 * win_width * win_height];
+  unsigned char* pixels = new unsigned char[3 * win_width * win_height];
   glReadPixels(0, 0, win_width, win_height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
   encodeOneStep(pixels, win_width, win_height, std::string("01"));
   delete[] pixels;
@@ -192,7 +192,7 @@ void changeSize(int w, int h)
 {
   // Prevent a divide by zero, when window is too short
   // (you cant make a window of zero width).
-  if(h == 0)
+  if (h == 0)
     h = 1;
 
   float ratio = 1.0* w / h;
@@ -215,7 +215,7 @@ void changeSize(int w, int h)
 //load, compile and set the shaders
 void setShaders()
 {
-  char *vs,*fs,*gs;
+  char *vs, *fs, *gs;
 
   v = glCreateShader(GL_VERTEX_SHADER);
   f = glCreateShader(GL_FRAGMENT_SHADER);
@@ -229,11 +229,11 @@ void setShaders()
   const char * vv = vs;
   const char * gg = gs;
 
-  GL_CHECK(glShaderSource(v, 1, &vv,NULL));
-  GL_CHECK(glShaderSource(f, 1, &ff,NULL));
-  GL_CHECK(glShaderSource(g, 1, &gg,NULL));
+  GL_CHECK(glShaderSource(v, 1, &vv, NULL));
+  GL_CHECK(glShaderSource(f, 1, &ff, NULL));
+  GL_CHECK(glShaderSource(g, 1, &gg, NULL));
 
-  free(vs);free(fs);free(gs);
+  free(vs); free(fs); free(gs);
 
   GL_CHECK(glCompileShader(v));
   GL_CHECK(glCompileShader(f));
@@ -242,72 +242,72 @@ void setShaders()
   GLint blen = 0;
   GLsizei slen = 0;
 
-  glGetShaderiv(v, GL_INFO_LOG_LENGTH , &blen);
+  glGetShaderiv(v, GL_INFO_LOG_LENGTH, &blen);
   if (blen > 1)
   {
     GLchar* compiler_log = (GLchar*)malloc(blen);
     glGetShaderInfoLog(v, blen, &slen, compiler_log);
     std::cout << "compiler_log vertex shader:\n" << compiler_log << std::endl;
-    free (compiler_log);
+    free(compiler_log);
   }
   blen = 0;
   slen = 0;
-  glGetShaderiv(f, GL_INFO_LOG_LENGTH , &blen);
+  glGetShaderiv(f, GL_INFO_LOG_LENGTH, &blen);
   if (blen > 1)
   {
     GLchar* compiler_log = (GLchar*)malloc(blen);
     glGetShaderInfoLog(f, blen, &slen, compiler_log);
     std::cout << "compiler_log fragment shader:\n" << compiler_log << std::endl;
-    free (compiler_log);
+    free(compiler_log);
   }
   blen = 0;
   slen = 0;
-  glGetShaderiv(g, GL_INFO_LOG_LENGTH , &blen);
+  glGetShaderiv(g, GL_INFO_LOG_LENGTH, &blen);
   if (blen > 1)
   {
     GLchar* compiler_log = (GLchar*)malloc(blen);
     glGetShaderInfoLog(g, blen, &slen, compiler_log);
     std::cout << "compiler_log geometry shader:\n" << compiler_log << std::endl;
-    free (compiler_log);
+    free(compiler_log);
   }
 
   p = glCreateProgram();
 
-  GL_CHECK(glAttachShader(p,f));
-  GL_CHECK(glAttachShader(p,v));
-  GL_CHECK(glAttachShader(p,g));
+  GL_CHECK(glAttachShader(p, f));
+  GL_CHECK(glAttachShader(p, v));
+  GL_CHECK(glAttachShader(p, g));
 
   GL_CHECK(glLinkProgram(p));
   //comment out this line to not use the shaders at all
   GL_CHECK(glUseProgram(p));
 }
 
-void initialize ()
+void initialize()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  GLfloat aspect = (GLfloat) 320 / 320;
+  GLfloat aspect = (GLfloat)320 / 320;
   gluPerspective(45, aspect, 0.1, 1000.0);
   glMatrixMode(GL_MODELVIEW);
-  glShadeModel( GL_SMOOTH );
-  glClearColor( 0.0f, 0.0f, 0.0f, 0.5f );
-  glClearDepth( 1.0f );
-  glEnable( GL_DEPTH_TEST );
-  glDepthFunc( GL_LEQUAL );
-  glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+  glShadeModel(GL_SMOOTH);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+  glClearDepth(1.0f);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
+  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
   GLfloat amb_light[] = { 0.1, 0.1, 0.1, 1.0 };
   GLfloat diffuse[] = { 0.6, 0.6, 0.6, 1 };
   GLfloat specular[] = { 0.7, 0.7, 0.3, 1 };
-  glLightModelfv( GL_LIGHT_MODEL_AMBIENT, amb_light );
-  glLightfv( GL_LIGHT0, GL_DIFFUSE, diffuse );
-  glLightfv( GL_LIGHT0, GL_SPECULAR, specular );
-  glEnable( GL_LIGHT0 );
-  glEnable( GL_COLOR_MATERIAL );
-  glShadeModel( GL_SMOOTH );
-  glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE );
-  glDepthFunc( GL_LEQUAL );
-  glEnable( GL_DEPTH_TEST );
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb_light);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_COLOR_MATERIAL);
+  glShadeModel(GL_SMOOTH);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
+  glDepthFunc(GL_LEQUAL);
+  glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
   glTranslatef(0.0, 0.0, -1.0);
@@ -319,8 +319,8 @@ int main(int argc, char **argv) {
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-  glutInitWindowPosition(100,100);
-  glutInitWindowSize(320,320);
+  glutInitWindowPosition(100, 100);
+  glutInitWindowSize(320, 320);
   glutCreateWindow("Computer Graphics");
 
   glutDisplayFunc(renderScene);
@@ -332,7 +332,7 @@ int main(int argc, char **argv) {
   glutMotionFunc(mouseMotion);
 
   glEnable(GL_DEPTH_TEST);
-  glClearColor(0.0,0.0,0.0,1.0);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
 
   glewInit();
   if (GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader)

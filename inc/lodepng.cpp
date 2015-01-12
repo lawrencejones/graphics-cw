@@ -74,16 +74,16 @@ const std::string currentDateTime() {
   return buf;
 }
 #else
-const char *getUserName()
+std::string GetUName()
 {
   uid_t uid = geteuid();
   struct passwd *pw = getpwuid(uid);
   if (pw)
   {
-    return pw->pw_name;
+    return std::string(pw->pw_name);
   }
 
-  return "";
+  return std::string("");
 }
 const std::string currentDateTime() {
   time_t     now = time(0);

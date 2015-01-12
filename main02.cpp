@@ -109,7 +109,7 @@ unsigned int frameCaptured = 0;
 //helper for submission
 void captureFrame()
 {
-  GLubyte* pixels = new GLubyte[3 * win_width * win_height];
+  unsigned char* pixels = new unsigned char[(int)3 * win_width * win_height];
   glReadPixels(0, 0, win_width, win_height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
   char taskn[128];
   sprintf(taskn,"02_%d", shader);
