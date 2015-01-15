@@ -381,8 +381,8 @@ void setShaders()
 	rf = glCreateShader(GL_FRAGMENT_SHADER);
 
 
-	vs = textFileRead("./shader04b.vert");
-	fs = textFileRead("./shader04b.frag");
+  vs = textFileRead(const_cast<char *>("./shader04b.vert"));
+  fs = textFileRead(const_cast<char *>("./shader04b.frag"));
 
 	const char * ff = fs;
 	const char * vv = vs;

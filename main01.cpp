@@ -9,9 +9,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
-
 #include <GL/glew.h>
-#include <GL/glut.h>
 
 #ifdef __linux__
 #include <pthread.h>
@@ -24,6 +22,9 @@
 #include <sys/time.h>
  #include <stdio.h>
 #include <unistd.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
 #endif
 ///////////////////////////////////////////////////////////////////////
 //helper for submission
@@ -223,9 +224,9 @@ void setShaders()
   f = glCreateShader(GL_FRAGMENT_SHADER);
   g = glCreateShader(GL_GEOMETRY_SHADER);
 
-  vs = textFileRead("./shader01.vert");
-  fs = textFileRead("./shader01.frag");
-  gs = textFileRead("./shader01.geom");
+  vs = textFileRead(const_cast<char *>("./shader01.vert"));
+  fs = textFileRead(const_cast<char *>("./shader01.frag"));
+  gs = textFileRead(const_cast<char *>("./shader01.geom"));
 
   const char * ff = fs;
   const char * vv = vs;

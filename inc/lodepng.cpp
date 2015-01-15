@@ -141,6 +141,7 @@ void encodeOneStep(const unsigned char* image, unsigned width, unsigned height, 
   image = pixelsFlipped;
 
   std::string fname = std::string("Graphics317_") + task + std::string("_") + GetUName() + std::string(".png");
+  printf("%s\n", fname.c_str());
   /*Encode the image*/
   unsigned error = lodepng_encode24_file(fname.c_str(), image, width, height);
 

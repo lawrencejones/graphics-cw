@@ -251,9 +251,9 @@ void setShaders()
 	f = glCreateShader(GL_FRAGMENT_SHADER);
 	g = glCreateShader(GL_GEOMETRY_SHADER);
 
-	vs = textFileRead("./shader04a.vert");
-	fs = textFileRead("./shader04a.frag");
-	gs = textFileRead("./shader04a.geom");
+  vs = textFileRead(const_cast<char *>("./shader04a.vert"));
+  fs = textFileRead(const_cast<char *>("./shader04a.frag"));
+  gs = textFileRead(const_cast<char *>("./shader04a.geom"));
 
 	const char * ff = fs;
 	const char * vv = vs;
