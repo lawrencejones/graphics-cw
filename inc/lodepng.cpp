@@ -153,7 +153,11 @@ void encodeOneStep(const unsigned char* image, unsigned width, unsigned height, 
 
 //not nice but here to avoi confusion in main file
 #include "GL/glew.h"
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 
 void renderID(int win_width, int win_height)
 {

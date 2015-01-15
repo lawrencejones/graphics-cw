@@ -25,6 +25,34 @@ find_package(OpenGL REQUIRED)
       endif()
     endif()
 endif()
+
+  IF (APPLE)
+# These values for Apple could probably do with improvement.
+    FIND_PATH( GLEW_INCLUDE_DIR glew.h
+      /System/Library/Frameworks/GLEW.framework/Versions/A/Headers
+      ${OPENGL_LIBRARY_DIR}
+    )
+    SET(GLEW_GLEW_LIBRARY "-framework GLEW" CACHE STRING "GLEW library for OSX")
+    SET(GLEW_cocoa_LIBRARY "-framework Cocoa" CACHE STRING "Cocoa framework for OSX")
+  ELSE (APPLE)
+
+    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
+      /usr/include/GL
+      /usr/openwin/share/include
+      /usr/openwin/include
+      /usr/X11R6/include
+      /usr/include/X11
+      /opt/graphics/OpenGL/include
+      /opt/graphics/OpenGL/contrib/libglew
+    )
+
+    FIND_LIBRARY( GLEW_GLEW_LIBRARY GLEW
+      /usr/openwin/lib
+      /usr/X11R6/lib
+    )
+
+  ENDIF (APPLE)
+
 find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Threads)
