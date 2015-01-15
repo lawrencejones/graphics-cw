@@ -8,7 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
-
 #include "GL/glew.h"
 
 #ifdef __linux__
@@ -22,9 +21,10 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
 #endif
-
-#include "GL/glut.h"
 
 #include "inc/lodepng.h"
 

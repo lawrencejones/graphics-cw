@@ -20,12 +20,15 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
 #endif
 
 #ifdef _WIN32
 #include "inc/mtime.h"
 #endif
-#include "GL/glut.h"
+
 #include "inc/lodepng.h"
 
 ///////////////////////////////////////////////////////////////////////

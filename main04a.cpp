@@ -20,14 +20,16 @@
 #endif
 
 #ifdef __APPLE__
-#include <glut.h>
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
 #endif
 
 #ifdef _WIN32
-#include "GL/glut.h"
+
 #include "inc/mtime.h"
 #endif
 

@@ -21,9 +21,11 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
 #endif
 
-#include <GL/glut.h>
 #include "inc/lodepng.h"
 ///////////////////////////////////////////////////////////////////////
 //Error checking functions
