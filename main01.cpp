@@ -20,7 +20,7 @@
 
 #ifdef __APPLE__
 #include <sys/time.h>
- #include <stdio.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <GLUT/glut.h>
 #else

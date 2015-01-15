@@ -8,6 +8,23 @@ endif(COMMAND cmake_policy)
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 find_package(OpenGL REQUIRED)
+ if (APPLE)
+    find_path(GLUT_INCLUDE_DIR glut.h ${OPENGL_LIBRARY_DIR})
+    find_library(GLUT_glut_LIBRARY GLUT DOC "GLUT library for OSX")
+    find_library(GLUT_cocoa_LIBRARY Cocoa DOC "Cocoa framework for OSX")
+
+    if(GLUT_cocoa_LIBRARY AND NOT TARGET GLUT::Cocoa)
+      add_library(GLUT::Cocoa UNKNOWN IMPORTED)
+      # Cocoa should always be a Framework, but we check to make sure.
+      if(GLUT_cocoa_LIBRARY MATCHES "/([^/]+)\\.framework$")
+        set_target_properties(GLUT::Cocoa PROPERTIES
+          IMPORTED_LOCATION "${GLUT_cocoa_LIBRARY}/${CMAKE_MATCH_1}")
+      else()
+        set_target_properties(GLUT::Cocoa PROPERTIES
+          IMPORTED_LOCATION "${GLUT_cocoa_LIBRARY}")
+      endif()
+    endif()
+endif()
 find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Threads)
