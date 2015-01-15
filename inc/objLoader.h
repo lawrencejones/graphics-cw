@@ -56,7 +56,7 @@ float* Model_OBJ::calculateNormal( float *coord1, float *coord2, float *coord3 )
 	/* normalization factor */
 	val = sqrt( vr[0]*vr[0] + vr[1]*vr[1] + vr[2]*vr[2] );
 
-	float norm[3];
+	float *norm = new float[3];
 	norm[0] = vr[0]/val;
 	norm[1] = vr[1]/val;
 	norm[2] = vr[2]/val;

@@ -374,7 +374,7 @@ void initialize ()
 int main(int argc, char **argv) {
 
   printf("calling putenv with: LIBGL_ALWAYS_SOFTWARE=1 \n");
-  if(putenv("LIBGL_ALWAYS_SOFTWARE=1")!=0)
+  if (putenv(const_cast<char *>("LIBGL_ALWAYS_SOFTWARE=1")) != 0)
   {
     fprintf(stderr,"putenv failed\n");
   }
