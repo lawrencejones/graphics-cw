@@ -6,12 +6,6 @@
 
 #version 150 compatibility
 
-uniform vec4 ambientColor;
-uniform vec4 diffuseColor;
-uniform vec4 specularColor;
-uniform float specularExponent;
-uniform int shader;
-
 in fragmentData
 {
   vec3 pos;
@@ -23,6 +17,5 @@ in fragmentData
 void main()
 {
   vec4 outcol = frag.color;
-
   gl_FragColor = outcol;
 }

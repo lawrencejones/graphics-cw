@@ -6,14 +6,6 @@
 
 #version 150 compatibility
 
-////////////////
-//exercise 2
-uniform vec4 ambientColor;
-uniform vec4 diffuseColor;
-uniform vec4 specularColor;
-uniform float specularExponent;
-uniform int shader;
-
 out vertexData
 {
   vec3 pos;
