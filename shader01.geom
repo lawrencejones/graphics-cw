@@ -11,15 +11,6 @@ layout (max_vertices = 72) out;
 
 const float pi = 3.14159265359;
 
-////////////////
-uniform vec4 ambientColor;
-uniform vec4 diffuseColor;
-uniform vec4 specularColor;
-uniform float specularExponent;
-
-uniform int level;
-uniform float time;
-
 in vertexData
 {
 	vec3 pos;
