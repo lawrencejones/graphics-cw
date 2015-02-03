@@ -26,12 +26,13 @@
 #else
 #include <GL/glut.h>
 #endif
+
 ///////////////////////////////////////////////////////////////////////
-//helper for submission
+// Helper for submission
 #include "inc/lodepng.h"
 
 ///////////////////////////////////////////////////////////////////////
-//declarations
+// Declarations
 void captureFrame();
 
 void CheckOpenGLError(const char* stmt, const char* fname, int line);
@@ -46,15 +47,14 @@ void CheckOpenGLError(const char* stmt, const char* fname, int line);
 #endif
 
 ///////////////////////////////////////////////////////////////////////
-//shaders and light pos variables
+// Shaders and light pos variables
 GLuint v, f, p, g;
 float lpos[4] = { 15.0, 0.5, 15.0, 0.0 };
 int subdivLevel;
 GLuint tex;
 
-// mouse controls
-/////////////////////////////////////////////////
-//scene interaction variables
+///////////////////////////////////////////////////////////////////////
+// Mouse controls
 int mouse_old_x, mouse_old_y;
 int mouse_buttons = 0;
 float rotate_x = 0.0, rotate_y = 0.0;
@@ -62,14 +62,14 @@ float move_x = 0.0, move_y = 0.0;
 unsigned int win_width = 128, win_height = 128;
 float translate_z = 0.0;
 unsigned int frameCaptured = 0;
-/////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////
-// TODO finish the following three functions to complete Exercise 1     
+// TODO finish the following three functions to complete Exercise 1
 //////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////
-//the actual render function, which is called for each frame
+// The actual render function, which is called for each frame
+
 void renderScene(void)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -83,7 +83,9 @@ void renderScene(void)
   glLightfv(GL_LIGHT0, GL_POSITION, lpos);
   /////////////////////////////////////////////////
   //TODO add scene interaction code here
-
+  glTranslatef(move_x, move_y, translate_z);
+  glRotatef(rotate_y, 1, 0, 0);
+  glRotatef(rotate_x, 0, 1, 0);
   /////////////////////////////////////////////////
   GL_CHECK(glUseProgram(p));
   glutSolidTeapot(0.5);
@@ -94,7 +96,7 @@ void renderScene(void)
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
 
-  //helper function for submission. Will capture 2nd frame of task
+  // Helper function for submission. Will capture 2nd frame of task
   frameCaptured++;
   if (frameCaptured == 2)
   {
@@ -106,7 +108,12 @@ void renderScene(void)
 }
 
 ///////////////////////////////////////////////////////////////////////
-// mouse interaction functions
+// Mouse interaction functions
+
+#define MOUSE_BTN_MASK(btnType) (1 << btnType)
+#define MOUSE_BTN_DOWN(btnType) \
+  (mouse_buttons && MOUSE_BTN_MASK(btnType))
+
 void mouseClick(int button, int state, int x, int y)
 {
   /////////////////////////////////////////////////
@@ -115,6 +122,16 @@ void mouseClick(int button, int state, int x, int y)
   // "state" of the mouse.
   /////////////////////////////////////////////////
 
+  if (state == GLUT_DOWN)
+  {
+    mouse_buttons |= MOUSE_BTN_MASK(button);
+    mouse_old_x = x;
+    mouse_old_y = y;
+  }
+  else if (state == GLUT_UP)
+  {
+    mouse_buttons &= ~MOUSE_BTN_MASK(button);
+  }
 
   /////////////////////////////////////////////////
 }
@@ -127,17 +144,37 @@ void mouseMotion(int x, int y)
   // rotations
   /////////////////////////////////////////////////
 
+  float dx = (float)(x - mouse_old_x)
+      , dy = (float)(y - mouse_old_y);
+
+  if (MOUSE_BTN_DOWN(GLUT_LEFT_BUTTON))
+  {
+    rotate_x += dx;
+    rotate_y += dy;
+  }
+  if (MOUSE_BTN_DOWN(GLUT_RIGHT_BUTTON))
+  {
+    translate_z += dy * 0.1f;
+  }
+  if (MOUSE_BTN_DOWN(GLUT_MIDDLE_BUTTON))
+  {
+    move_x += dx * (1.0f / win_width);
+    move_y += dy * (1.0f / win_height);
+  }
+
+  mouse_old_x = x;
+  mouse_old_y = y;
 
   /////////////////////////////////////////////////
 }
 
+///////////////////////////////////////////////////////////////////////
+// Nothing to do from here on
+///////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////
-//nothing to do from here on
-///////////////////////////////////////////////////////////////////////
+// Text file IO for shader files
 
-///////////////////////////////////////////////////////////////////////
-//Text file IO for shader files
 char *textFileRead(char *fn)
 {
   FILE *fp;
@@ -172,7 +209,8 @@ char *textFileRead(char *fn)
 }
 
 ///////////////////////////////////////////////////////////////////////
-//helper for submission
+// Helper for submission
+
 void captureFrame()
 {
   unsigned char* pixels = new unsigned char[3 * win_width * win_height];
@@ -182,15 +220,17 @@ void captureFrame()
 }
 
 ///////////////////////////////////////////////////////////////////////
-//keyboard functions
-void processNormalKeys(unsigned char key, int x, int y) {
+// Keyboard functions
 
+void processNormalKeys(unsigned char key, int x, int y)
+{
   if (key == 27)
     exit(0);
 }
 
 ///////////////////////////////////////////////////////////////////////
-//adapt viewport when window size changes
+// Adapt viewport when window size changes
+
 void changeSize(int w, int h)
 {
   // Prevent a divide by zero, when window is too short
@@ -215,7 +255,8 @@ void changeSize(int w, int h)
 }
 
 ///////////////////////////////////////////////////////////////////////
-//load, compile and set the shaders
+// Load, compile and set the shaders
+
 void setShaders()
 {
   char *vs, *fs, *gs;
@@ -281,7 +322,7 @@ void setShaders()
   GL_CHECK(glAttachShader(p, g));
 
   GL_CHECK(glLinkProgram(p));
-  //comment out this line to not use the shaders at all
+  // Comment out this line to not use the shaders at all
   GL_CHECK(glUseProgram(p));
 }
 
@@ -317,9 +358,10 @@ void initialize()
 }
 
 ///////////////////////////////////////////////////////////////////////
-//main, setup and execution of environment
-int main(int argc, char **argv) {
+// Main, setup and execution of environment
 
+int main(int argc, char **argv)
+{
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
   glutInitWindowPosition(100, 100);
@@ -368,7 +410,8 @@ int main(int argc, char **argv) {
 }
 
 //////////////////////////////////////////////////////////////////////
-//Error checking functions
+// Error checking functions
+
 void CheckOpenGLError(const char* stmt, const char* fname, int line)
 {
   GLenum err = glGetError();
@@ -378,3 +421,4 @@ void CheckOpenGLError(const char* stmt, const char* fname, int line)
     abort();
   }
 }
+
