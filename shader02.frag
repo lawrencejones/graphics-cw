@@ -29,7 +29,7 @@ void main()
   if (shader == 2)
   {
     ///////////////////////////////////////////////////
-    //TODO add code for exercise 2.2 Phong shading here
+    // TODO add code for exercise 2.2 Phong shading here
     ///////////////////////////////////////////////////
 
     float d = distance(frag.pos, gl_LightSource[0].position.xyz);
@@ -54,9 +54,21 @@ void main()
   if (shader == 3)
   {
     ///////////////////////////////////////////////////
-    //TODO add code for exercise 2.3 toon shading here
+    // TODO add code for exercise 2.3 toon shading here
     ///////////////////////////////////////////////////
 
+    vec3 l = normalize(gl_LightSource[0].position.xyz - frag.pos);
+    float f = dot(normalize(l), normalize(frag.normal));
+
+    if (f > 0.98) {
+      outcol = vec4(0.8, 0.8, 0.8, 1.0);
+    } else if (f > 0.5) {
+      outcol = vec4(0.8, 0.4, 0.4, 1.0);
+    } else if (f > 0.25) {
+      outcol = vec4(0.6, 0.2, 0.2, 1.0);
+    } else {
+      outcol = vec4(0.1, 0.1, 0.1, 1.0);
+    }
 
     ///////////////////////////////////////////////////
   }
