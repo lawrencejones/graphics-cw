@@ -112,7 +112,7 @@ void renderScene(void)
 
 #define MOUSE_BTN_MASK(btnType) (1 << btnType)
 #define MOUSE_BTN_DOWN(btnType) \
-  (mouse_buttons && MOUSE_BTN_MASK(btnType))
+  (mouse_buttons & MOUSE_BTN_MASK(btnType))
 
 void mouseClick(int button, int state, int x, int y)
 {
