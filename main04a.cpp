@@ -195,7 +195,7 @@ void renderScene(void)
 //keyboard functions
 void processNormalKeys(unsigned char key, int x, int y) {
 
-	if (key == 27) 
+	if (key == 27)
 		exit(0);
 }
 
@@ -271,10 +271,10 @@ void setShaders()
 	glCompileShader(f);
 	glCompileShader(g);
 
-	GLint blen = 0; 
+	GLint blen = 0;
 	GLsizei slen = 0;
 
-	glGetShaderiv(v, GL_INFO_LOG_LENGTH , &blen);       
+	glGetShaderiv(v, GL_INFO_LOG_LENGTH , &blen);
 	if (blen > 1)
 	{
 		GLchar* compiler_log = (GLchar*)malloc(blen);
@@ -282,9 +282,9 @@ void setShaders()
 		std::cout << "compiler_log vertex shader:\n" << compiler_log << std::endl;
 		free (compiler_log);
 	}
-	blen = 0; 
+	blen = 0;
 	slen = 0;
-	glGetShaderiv(f, GL_INFO_LOG_LENGTH , &blen);       
+	glGetShaderiv(f, GL_INFO_LOG_LENGTH , &blen);
 	if (blen > 1)
 	{
 		GLchar* compiler_log = (GLchar*)malloc(blen);
@@ -292,9 +292,9 @@ void setShaders()
 		std::cout << "compiler_log fragment shader:\n" << compiler_log << std::endl;
 		free (compiler_log);
 	}
-	blen = 0; 
+	blen = 0;
 	slen = 0;
-	glGetShaderiv(g, GL_INFO_LOG_LENGTH , &blen);       
+	glGetShaderiv(g, GL_INFO_LOG_LENGTH , &blen);
 	if (blen > 1)
 	{
 		GLchar* compiler_log = (GLchar*)malloc(blen);
@@ -342,7 +342,7 @@ void setShaders()
 
 
 
-void initialize () 
+void initialize ()
 {
 	GLfloat aspect = (GLfloat) 320 / 320;
 	glMatrixMode(GL_PROJECTION);
@@ -369,11 +369,11 @@ void initialize ()
 	glDepthFunc( GL_LEQUAL );
 	glEnable( GL_DEPTH_TEST );
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0); 
+	glEnable(GL_LIGHT0);
 
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	textureImage = readPPM("pebbles_texture.ppm");
+	textureImage = readPPM("lava_texture.ppm"); // "pebbles_texture.ppm"
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

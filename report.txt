@@ -1,0 +1,4 @@
+Currently each fragments color value is calculated as a sum of the texture color, plus lightening from diffuse and specular shading.
+The diffuse and specular shading add light equally to all rgb components, meaning that the texture value at each fragment has no effect on the magnitude of the illumination.
+To increase realism, we could compute the final fragment color value by finding a proportional affect of an illumination on the fragment, given that a blue fragment will reflect (proportionally) more blue diffuse and specular illumination.
+In this way, our teapot would appear to more accurately model real life reflection, by taking the texture color into account when shading.

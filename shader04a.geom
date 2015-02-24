@@ -27,7 +27,7 @@ in vertexData
 	vec4 color;
 	//Exerceise 4:
 	vec4 texCoords;
-}vertices[];
+} vertices[];
 
 out fragmentData
 {
@@ -36,7 +36,7 @@ out fragmentData
 	vec4 color;
 	//Exerceise 4:
 	vec4 texCoords;
-}frag;   
+} frag;
 
 
 void main()
@@ -50,7 +50,7 @@ void main()
 			frag.vpos = vertices[i].pos;
 			frag.normal = vertices[i].normal;
 			frag.color = vertices[i].color;
-			
+
 			//Exercise 4:
 			frag.texCoords = vertices[i].texCoords;
 			EmitVertex();
