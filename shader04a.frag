@@ -5,6 +5,7 @@
 /************************************************************************/
 
 #version 150 compatibility
+#define MEW 0.3
 
 uniform vec4 ambientColor;
 uniform vec4 diffuseColor;
@@ -20,22 +21,34 @@ in fragmentData
   vec4 color;
   //Exercise 4:
   vec4 texCoords;
-}frag;
+} frag;
 
 ///////////////
 
 void main()
 {
-  //texture information
-  vec4 outcol = texture2D(textureImage, frag.texCoords.st);
 
   //////////////////////////////////////////////////////////
-  //TODO Exercise 04a: integrate the texture information 
+  //TODO Exercise 04a: integrate the texture information
   // into a Phong shader (e.g. into the one from Exercise 2)
   //////////////////////////////////////////////////////////
 
+  float d = distance(frag.vpos, gl_LightSource[0].position.xyz);
+  float attenuation = 1.0 / (
+      gl_LightSource[0].constantAttenuation
+    + gl_LightSource[0].linearAttenuation * d
+    + gl_LightSource[0].quadraticAttenuation * d * d
+  );
 
-    gl_FragColor = vec4(1,0,0,0);
+  vec3 l = normalize(gl_LightSource[0].position.xyz - frag.vpos);
+  vec3 r = reflect(-l, frag.normal);
+  vec3 e = normalize(-frag.vpos);
+
+  vec4 illumDiffuse = attenuation * diffuseColor * max(dot(frag.normal, l), 0);
+  vec4 illumSpecular = attenuation * specularColor * max(pow(dot(r, e), MEW * specularExponent), 0);
+
+  gl_FragColor = texture2D(textureImage, frag.texCoords.st) + illumDiffuse + illumSpecular;
+
   //////////////////////////////////////////////////////////
 
 
