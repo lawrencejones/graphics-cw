@@ -7,7 +7,8 @@
 #version 150 compatibility
 
 #define MEW 0.3
-#define SPECULAR_EXPONENT 100
+#define SPECULAR_EXPONENT 10
+#define EPSILON 0.00001
 
 #define VEC3_I vec3(1,1,1)
 #define XYZ_AND_H(v,h) vec4(v.x, v.y, v.z, h)
@@ -22,6 +23,8 @@ uniform mat4 modelViewMatrix;
 
 const int raytraceDepth = 42;
 const int numSpheres = 6;
+
+const vec3 lightPos = vec3(6,4,3);
 
 struct Ray
 {
@@ -151,34 +154,78 @@ float rnd()
   return float(seed)/509.0;
 }
 
-vec3 computeShadow(in Intersection intersect)
+#define CONSTANT_ATTENUTAION 1.0
+#define LINEAR_ATTENUTAION 0.22
+#define QUADRATIC_ATTENUATION 0.20
+
+vec3 computeShadow(in Intersection intersect, vec3 direction)
 {
-  ////////////////////////////////////////////////////////////////////
-  // TODO
-  ////////////////////////////////////////////////////////////////////
+
+  Intersection i;
+  i.hit = 0;
+
+  Ray toLight;
+  toLight.origin = intersect.point + EPSILON * intersect.normal;
+  toLight.dir = normalize(lightPos - toLight.origin);
+
+  if (Intersect(toLight, i).hit == 1)
+  {
+    float lightIntensity = 20;
+    float d = distance(lightPos, toLight.origin);
+
+    float attenuation = 1.0 / (
+        CONSTANT_ATTENUTAION
+      + LINEAR_ATTENUTAION * d
+      + QUADRATIC_ATTENUATION * d * d
+    );
+
+    vec3 r = reflect(toLight.dir, intersect.normal);
+    vec3 e = normalize(direction);
+
+    vec3 illumDiffuse = attenuation * lightIntensity * intersect.colour * dot(intersect.normal, toLight.dir);
+    vec3 illumSpecular = attenuation * lightIntensity * intersect.colour * pow(max(dot(r, e), 0), SPECULAR_EXPONENT);
+
+    return illumDiffuse + illumSpecular;
+
+  }
 
   return vec3(0,0,0);
 }
 
-vec4 shadeByPhong(Intersection intersection, vec3 lightSource)
+vec3 _computeShadow(in Intersection intersect, vec3 viewdir)
 {
+  //////////////////////////////////////
+  //TODO Exercise 5
+  //compute the shadow of the objects 
+  //using additional rays
+  float epsilon = 0.00001;
+  Intersection i;
+  i.hit = 0;
+  Ray toLight;
+  toLight.origin = intersect.point + epsilon * intersect.normal;
+  toLight.dir = normalize(lightPos - toLight.origin);
+  Intersect(toLight, i);
+  if(i.hit == 0)
+  {
+    float lightIntensity = 20;
 
-  float d = distance(intersection.point, lightSource.xyz);
-  float attenuation = 1.0 / (
-      gl_LightSource[0].constantAttenuation
-    + gl_LightSource[0].linearAttenuation * d
-    + gl_LightSource[0].quadraticAttenuation * d * d
-  );
+    float d = distance(lightPos, toLight.origin);
+    float con =1.0;
+    float lin =0.22;
+    float quad=0.20; 
+    float attenuation = 1.0 / (con + lin*d + quad*d*d);
+    vec3 diffuseColour = intersect.colour;
+    vec3 diffuse = lightIntensity * attenuation * diffuseColour * dot(intersect.normal, toLight.dir);
 
-  vec3 l = normalize(lightSource - intersection.point);
-  vec3 r = reflect(-l, intersection.normal);
-  vec3 e = normalize(-intersection.point);
-
-  vec4 illumAmbient = XYZ_AND_H((0.1 * intersection.colour * vec3(1, 1, 1)), 1);
-  vec4 illumDiffuse = XYZ_AND_H((0.5 * attenuation * intersection.colour * max(dot(intersection.normal, l), 0)), 1);
-  vec4 illumSpecular = XYZ_AND_H((attenuation * intersection.colour * max(pow(dot(r, e), MEW * SPECULAR_EXPONENT), 0)), 1);
-
-  return illumAmbient + illumDiffuse + illumSpecular;
+    vec3 specularColour = intersect.colour;
+    vec3 r = reflect(toLight.dir, intersect.normal);
+    vec3 e = normalize(viewdir);
+    float specularExponent = 10;
+    vec3 specular = lightIntensity * attenuation * specularColour * pow(max(dot(r, e), 0), specularExponent);
+    return diffuse + specular;
+  }
+  else return vec3(0,0,0);
+  //////////////////////////////////////
 
 }
 
@@ -204,17 +251,25 @@ void main()
   ray.dir = getRayDirection(dir);
 
   Intersection i;
+  outcolour = vec4(0,0,0,0);
 
   // int totalLength = 0;
   int depth = 1;
-  // int reflectivity = 0.5;
+  float reflectivity = 0.5;
+  float totalLength = 0;
+  float ambiance = 0.1;
 
   do
   {
-    if (Intersect(ray, i).hit == 1)
-    {
-      outcolour.xyz = i.colour;
-    }
+
+    Intersect(ray, i);
+
+    vec3 colour = ambiance * i.colour + _computeShadow(i, ray.dir);
+    outcolour.xyz = outcolour.xyz + colour * pow(reflectivity, depth);
+
+    ray.origin = i.point + EPSILON * i.normal;
+    ray.dir = reflect(ray.dir, i.normal);
+
   }
   while (i.hit == 1 && ++depth < raytraceDepth);
 
