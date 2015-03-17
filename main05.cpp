@@ -434,7 +434,7 @@ void initialize ()
 	GLfloat aspect = (GLfloat) 568 / 320;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45, aspect, 0.1, 1000.0);
+	gluPerspective(50, aspect, 0.1, 1000.0);
 	glMatrixMode(GL_MODELVIEW);
 	glShadeModel( GL_SMOOTH );
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.5f );
